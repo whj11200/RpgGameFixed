@@ -11,5 +11,7 @@ public partial class Player : MonoBehaviour
         TryGetComponent(out ani);
         TryGetComponent(out rb);
         TryGetComponent(out capCol);
+
+        //haha
     }
 }
