@@ -33,7 +33,7 @@ public class AiDamage : MonoBehaviour
     {
         if (!aiHp.isDie)
         {
-            if (other.gameObject.CompareTag("Sword"))
+            if (other.TryGetComponent(out SwordBoxCol damage))
             {
                 Enemy_ani.SetTrigger("Damage");
                 Vector3 distance = (transform.position - other.transform.position).normalized;
@@ -42,20 +42,20 @@ public class AiDamage : MonoBehaviour
                 DamageEffect.Play();
                 aiHp.TakeAttackDamage(15);
             }
-            if (other.gameObject.CompareTag("IceEffect"))
+            if (other.transform.parent.TryGetComponent(out IceEffect iceEffect))
             {
                 iceEffectActive = true;
 
                 StartCoroutine(HitSkill());
             }
-            if (other.gameObject.CompareTag("IceSleash"))
+            if (other.TryGetComponent(out Sleah sleah))
             {
                 Enemy_ani.SetTrigger("Damage");
                 agent.isStopped = true;
                 DamageEffect.Play();
                 aiHp.TakeAttackDamage(30);
             }
-            if (other.gameObject.CompareTag("SkeletonAttack"))
+            if (other.transform.parent.parent.TryGetComponent(out SkAi skAi))
             {
                 aiHp.TakeAttackDamage(3);
                 agent.isStopped = true;

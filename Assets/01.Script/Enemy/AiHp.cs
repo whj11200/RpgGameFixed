@@ -83,16 +83,15 @@ public class AiHp : MonoBehaviour,IAihp
         if (Hp <= 0)
         {
             Aicap.enabled = false;
+            isDie = true;
             StartCoroutine(Die());
         }
     }
 
     IEnumerator Die()
     {
-       
         airb.isKinematic = true;
         animator.SetTrigger("Die");
-        isDie = true;
         agent.isStopped = true;
         agent.speed = 0;
         yield return new WaitForSeconds(3f);

@@ -33,8 +33,8 @@ public class SkAi : MonoBehaviour
     {
         Sk_agent.speed = 2;
         Sk_agent.isStopped = false;
-        currentState = State.Idle; // »óÅÂ ÃÊ±âÈ­
-        timer = 0f; // Å¸ÀÌ¸Ó ÃÊ±âÈ­
+        currentState = State.Idle; // ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
+        timer = 0f; // Å¸ï¿½Ì¸ï¿½ ï¿½Ê±ï¿½È­
         StartCoroutine(StateMachine());
     }
 
@@ -42,13 +42,13 @@ public class SkAi : MonoBehaviour
     {
         while (true)
         {
-            // Å¸ÀÌ¸Ó Ã¼Å©
+            // Å¸ï¿½Ì¸ï¿½ Ã¼Å©
             timer += Time.deltaTime;
             if (timer >= DeadTime && currentState != State.Dead)
             {
                 currentState = State.Dead;
                 yield return StartCoroutine(Sk_Dead());
-                break; // ÄÚ·çÆ¾ Á¾·á
+                break; // ï¿½Ú·ï¿½Æ¾ ï¿½ï¿½ï¿½ï¿½
             }
 
             EnemyFind();
@@ -68,7 +68,7 @@ public class SkAi : MonoBehaviour
                     break;
             }
 
-            yield return null; // ´ÙÀ½ ÇÁ·¹ÀÓ±îÁö ´ë±â
+            yield return null; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ó±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
         }
     }
 
@@ -101,10 +101,14 @@ public class SkAi : MonoBehaviour
             {
                 currentState = State.Move;
             }
+            else if(distanceToEnemy >= finddistance)
+            {
+                 currentState = State.NotEnemy;
+            }
         }
         else
         {
-            currentState = State.NotEnemy; // ÀûÀÌ ¾øÀ» °æ¿ì »óÅÂ ÀüÈ¯
+            currentState = State.NotEnemy; 
         }
     }
 
@@ -125,10 +129,10 @@ public class SkAi : MonoBehaviour
         Sk_agent.destination = enemypos.position;
         Sk_agent.isStopped = false;
 
-        // Move »óÅÂ¿¡¼­ Àû°úÀÇ °Å¸® Ã¼Å©
+        // Move ï¿½ï¿½ï¿½Â¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Å¸ï¿½ Ã¼Å©
         if (Vector3.Distance(transform.position, enemypos.position) <= attackdistance)
         {
-            currentState = State.Attack; // °ø°Ý »óÅÂ·Î ÀüÈ¯
+            currentState = State.Attack; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â·ï¿½ ï¿½ï¿½È¯
         }
     }
 
@@ -139,24 +143,26 @@ public class SkAi : MonoBehaviour
         sk_animator.SetBool("Attack", true);
         Sk_agent.isStopped = true;
 
-        // °ø°Ý »óÅÂ¿¡¼­ Àû°úÀÇ °Å¸® Ã¼Å©
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Å¸ï¿½ Ã¼Å©
         if (Vector3.Distance(transform.position, enemypos.position) > attackdistance)
         {
-            currentState = State.Move; // ´Ù½Ã ÀÌµ¿ »óÅÂ·Î ÀüÈ¯
+            currentState = State.Move; // ï¿½Ù½ï¿½ ï¿½Ìµï¿½ ï¿½ï¿½ï¿½Â·ï¿½ ï¿½ï¿½È¯
         }
     }
 
     void NotEnemy()
     {
         var Playerdistance = Vector3.Distance(transform.position, Playerpos.position);
-        if(Playerdistance <= 3)
+        if(Playerdistance <= 1.5)
         {
+            sk_animator.SetBool("Attack", false);
             sk_animator.SetBool("Idle", true);
             sk_animator.SetBool("Find", false);
             Sk_agent.isStopped=true;
         }
-        else if(Playerdistance >= 3)
+        else if(Playerdistance >= 1)
         {
+             sk_animator.SetBool("Attack", false);
             sk_animator.SetBool("Idle", false);
             sk_animator.SetBool("Find", true);
             Sk_agent.destination = Playerpos.position;

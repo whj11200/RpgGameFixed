@@ -15,7 +15,7 @@ public partial class PlayerSkills : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1) && Time.time >= twoskilltimerover && !isSkillings && !isTwoskilling)
+        if (Input.GetKeyDown(KeyCode.Alpha1) && Time.time >= twoskilltimerover && !isSkillings)
         {
             TwoSkillUiimage.fillAmount = 0;
             TwoSkillUiText.enabled = true;
@@ -29,16 +29,18 @@ public partial class PlayerSkills : MonoBehaviour
             StartCoroutine(Skillone());
             StartCoroutine(UpdateSkillUi());
         }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
+        if (Input.GetKeyDown(KeyCode.Alpha3)&& Time.time >= ultimatetimerover && !isSkillings )
         {
+            UltimateUiimage.fillAmount = 0;
+            UltimateUiText.enabled= true;
             StartCoroutine(Ultimate());
+            StartCoroutine(UlitmateUi());
         }
     }
 
     IEnumerator Skillone()
     {
         isSkillings = true;
-        isOneskilling = true;
         oneskilltimerover = Time.time + oneskillTimer;
         player.ani.SetTrigger("Skillone");
         yield return new WaitForSeconds(0.5f);
@@ -47,13 +49,12 @@ public partial class PlayerSkills : MonoBehaviour
         var skillone = Instantiate(skillOne, skilldistance, transform.rotation);
         SwordPar.Stop();
         yield return new WaitForSeconds(0.5f);
-        isOneskilling = false;
         isSkillings = false;
     }
 
     IEnumerator Skilltwo()
     {
-        isTwoskilling = true;
+    
         isSkillings = true;
         twoskilltimerover = twoskilltimerover + twoskillTimer;
         player.ani.SetTrigger("Skilltwo");
@@ -69,9 +70,9 @@ public partial class PlayerSkills : MonoBehaviour
     IEnumerator Ultimate()
     {
         isSkillings = true;
-        ultimatering = true;
-        player.ani.SetTrigger("Ultimate");
 
+        player.ani.SetTrigger("Ultimate");
+        ultimatetimerover = ultimatetimerover + ultimateTimer;
         yield return new WaitForSeconds(1.14f);
 
         Vector3 skillup = transform.position+ transform.up * 1.5f;
@@ -130,8 +131,24 @@ public partial class PlayerSkills : MonoBehaviour
             yield return null;
         }
         TwoSkillUiimage.fillAmount = 1;
-        TwoSkillUiText.enabled = false;
-        isTwoskilling = false;
+        TwoSkillUiText.enabled =false;
+
+    }
+      IEnumerator UlitmateUi()
+    {
+        float elapsedTime = 0f;
+        UltimateUiText.text = $"{(int)elapsedTime}";
+        while (elapsedTime < ultimateTimer)
+        {
+            float remainingTime = ultimateTimer - elapsedTime;
+            UltimateUiText.text = $"{(int)remainingTime}";
+            UltimateUiimage.fillAmount = elapsedTime / ultimateTimer;
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        UltimateUiimage.fillAmount = 1;
+        UltimateUiText.enabled = false;
+ 
     }
 
     void SwordSkillEffect()
