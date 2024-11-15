@@ -7,10 +7,11 @@ using UnityEngine.UI;
 
 public class AiHp : MonoBehaviour,IAihp
 {
-    Animator animator;
-    NavMeshAgent agent;
-    CapsuleCollider Aicap;
-    Rigidbody airb;
+    public EnemyAi enemyAi;
+
+
+
+
     [SerializeField]Image Hpimage;
     Canvas Enemycanvas;
 
@@ -25,19 +26,15 @@ public class AiHp : MonoBehaviour,IAihp
         {
             isDie = false;
             Enemycanvas.enabled = true;
-            agent.isStopped = false;
-            agent.speed = 5f;
-            airb.isKinematic = false;
+            enemyAi.nav.isStopped = false;
+            enemyAi.nav.speed = 5f;
+            enemyAi.rb.isKinematic = false;
         }
     }
     void Start()
     {
         
         SetHealth(MaxHp);
-        animator = GetComponent<Animator>();
-        agent = GetComponent<NavMeshAgent>();
-        Aicap = GetComponent<CapsuleCollider>();
-        airb = GetComponent<Rigidbody>();
         Hpimage = transform.GetChild(6).GetChild(2).GetComponent<Image>();
         Enemycanvas = transform.GetChild(6).GetComponent<Canvas>();
     }
@@ -68,7 +65,7 @@ public class AiHp : MonoBehaviour,IAihp
     {
         Hp -= damafge;
         Hp = Mathf.Clamp(Hp, 0, MaxHp);
-        agent.speed = slow;
+        enemyAi.nav.speed = slow;
         if (Hp <= 0)
         {
             StartCoroutine(Die());
@@ -82,7 +79,7 @@ public class AiHp : MonoBehaviour,IAihp
         Hp = Mathf.Clamp(Hp, 0, MaxHp);
         if (Hp <= 0)
         {
-            Aicap.enabled = false;
+            enemyAi.capCol.enabled = false;
             isDie = true;
             StartCoroutine(Die());
         }
@@ -90,10 +87,10 @@ public class AiHp : MonoBehaviour,IAihp
 
     IEnumerator Die()
     {
-        airb.isKinematic = true;
-        animator.SetTrigger("Die");
-        agent.isStopped = true;
-        agent.speed = 0;
+        enemyAi.rb.isKinematic = true;
+        enemyAi.ani.SetTrigger("Die");
+        enemyAi.nav.isStopped = true;
+        enemyAi.nav.speed = 0;
         yield return new WaitForSeconds(3f);
         gameObject.SetActive(false);
         Enemycanvas.enabled = false;

@@ -5,11 +5,10 @@ using UnityEngine.AI;
 
 public class AiMoveattack : MonoBehaviour
 {
+    public EnemyAi enemyAi;
     Transform playerpos;
-    NavMeshAgent Aiagent;
-    Animator Aianimator;
+  
     BoxCollider attackbox;
-    AiHp aihp;
 
     /// <summary>
     /// 변수
@@ -23,22 +22,21 @@ public class AiMoveattack : MonoBehaviour
     void Start()
     {
         playerpos = GameObject.FindWithTag("Player").transform; 
-        Aiagent = gameObject.GetComponent<NavMeshAgent>();
-        Aianimator = gameObject.GetComponent<Animator>();
+
         attackbox = transform.GetChild(5).GetComponent<BoxCollider>();
-        aihp = GetComponent<AiHp>();
+
         attackbox.enabled = false;
     }
 
     void Update()
     {
-        if (!aihp.isDie&&!GameManger.instance.gameover)
+        if (!enemyAi.hp.isDie&&!GameManger.instance.gameover)
         {
             IsMoveAttack();
         }
         if (GameManger.instance.gameover)
         {
-            Aianimator.SetBool("Attack", false);
+            enemyAi.ani.SetBool("Attack", false);
         }
 
     }
@@ -52,28 +50,26 @@ public class AiMoveattack : MonoBehaviour
         
         if (distance <= 1)
         {
-            Aianimator.SetBool("Attack", true);
-            Aianimator.SetBool("Find", false);
-            Aiagent.isStopped = true;  // 공격 중에는 이동을 멈춤
+            Attack();
         }
         else if (distance <= 5)
         {
-            Aianimator.SetBool("Attack", false);
-            Aianimator.SetBool("Find", true);
-            Aiagent.destination = playerpos.transform.position;
-            Aiagent.isStopped = false;  // 플레이어에게 이동
+            enemyAi.ani.SetBool("Attack", false);
+            enemyAi.ani.SetBool("Find", true);
+            enemyAi.nav.destination = playerpos.transform.position;
+            enemyAi.nav.isStopped = false;  // 플레이어에게 이동
             transform.rotation = Quaternion.Slerp(transform.rotation, rot, Time.deltaTime * 5F);
         }
         else
         {
             Vector3 LookPoint = (randomDestination - transform.position).normalized;
             Quaternion AirotLookPoint = Quaternion.LookRotation(LookPoint);
-            Aianimator.SetBool("Find", false);
-            Aiagent.isStopped = false;  // 이동 활성화
+            enemyAi.ani.SetBool("Find", false);
+            enemyAi.nav.isStopped = false;  // 이동 활성화
 
             if (isWaiting)
             {
-                Aianimator.SetBool("Walk", false); // 대기 종료 시 애니메이션 끔
+                enemyAi.ani.SetBool("Walk", false); // 대기 종료 시 애니메이션 끔
                 if (Time.time >= waitStartTime + waitTime)
                 {
                     isWaiting = false; // 대기 종료
@@ -85,8 +81,8 @@ public class AiMoveattack : MonoBehaviour
                 {
                     
                     randomDestination = GetRandomDestination();
-                    Aiagent.destination = randomDestination;
-                    Aianimator.SetBool("Walk", true); // 이동 시작 시 애니메이션 활성화
+                    enemyAi.nav.destination = randomDestination;
+                    enemyAi.ani.SetBool("Walk", true); // 이동 시작 시 애니메이션 활성화
                     nextMoveTime = Time.time + moveInterval;
                     transform.rotation = Quaternion.Slerp(transform.rotation, AirotLookPoint, Time.deltaTime * 5F);
                 }
@@ -102,6 +98,12 @@ public class AiMoveattack : MonoBehaviour
 
     }
 
+    private void Attack()
+    {
+        enemyAi.ani.SetBool("Attack", true);
+        enemyAi.ani.SetBool("Find", false);
+        enemyAi.nav.isStopped = true;  // 공격 중에는 이동을 멈춤
+    }
 
     private Vector3 GetRandomDestination()
     {

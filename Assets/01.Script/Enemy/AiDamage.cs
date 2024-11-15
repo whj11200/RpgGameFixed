@@ -4,43 +4,42 @@ using System.Collections;
 
 public class AiDamage : MonoBehaviour
 {
+    public EnemyAi enemyAi;
     float backforce = 5f;
     float damageInterval = 0.5f; // 데미지 주는 간격
     public bool iceEffectActive = false;
 
-    Rigidbody rb;
-    Animator Enemy_ani;
-    [SerializeField] NavMeshAgent agent;
+
+
+
+
     ParticleSystem DamageEffect;
-    AiHp aiHp;
 
     private void Awake()
     {
-        aiHp = GetComponent<AiHp>();
-        rb = GetComponent<Rigidbody>();
-        Enemy_ani = GetComponent<Animator>();
-        agent = GetComponent<NavMeshAgent>();
+        
+
         DamageEffect = transform.GetChild(4).GetComponent<ParticleSystem>();
         DamageEffect.Stop();
     }
 
     private void Update()
     {
-        agent.speed = Mathf.Clamp(agent.speed, 0.5f, 2f);
+        enemyAi.nav.speed = Mathf.Clamp(enemyAi.nav.speed, 0.5f, 2f);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!aiHp.isDie)
+        if (!enemyAi.hp.isDie)
         {
             if (other.TryGetComponent(out SwordBoxCol damage))
             {
-                Enemy_ani.SetTrigger("Damage");
+                enemyAi.ani.SetTrigger("Damage");
                 Vector3 distance = (transform.position - other.transform.position).normalized;
-                rb.AddForce(distance * backforce, ForceMode.Impulse);
-                agent.isStopped = true;
+                enemyAi.rb.AddForce(distance * backforce, ForceMode.Impulse);
+                enemyAi.nav.isStopped = true;
                 DamageEffect.Play();
-                aiHp.TakeAttackDamage(15);
+                enemyAi.hp.TakeAttackDamage(15);
             }
             if (other.transform.parent.TryGetComponent(out IceEffect iceEffect))
             {
@@ -50,15 +49,15 @@ public class AiDamage : MonoBehaviour
             }
             if (other.TryGetComponent(out Sleah sleah))
             {
-                Enemy_ani.SetTrigger("Damage");
-                agent.isStopped = true;
+                enemyAi.ani.SetTrigger("Damage");
+                enemyAi.nav.isStopped = true;
                 DamageEffect.Play();
-                aiHp.TakeAttackDamage(30);
+                enemyAi.hp.TakeAttackDamage(30);
             }
             if (other.transform.parent.parent.TryGetComponent(out SkAi skAi))
             {
-                aiHp.TakeAttackDamage(3);
-                agent.isStopped = true;
+                enemyAi.hp.TakeAttackDamage(3);
+                enemyAi.nav.isStopped = true;
                 DamageEffect.Play();
 
             }
@@ -70,12 +69,12 @@ public class AiDamage : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Sword"))
         {
-            agent.isStopped = true;
+            enemyAi.nav.isStopped = true;
             DamageEffect.Stop();
         }
         else if (other.gameObject.CompareTag("IceEffect"))
         {
-            agent.isStopped = false;
+            enemyAi.nav.isStopped = false;
             ResetSpeed();
             iceEffectActive = false; // iceEffectActive를 false로 초기화
         }
@@ -83,9 +82,9 @@ public class AiDamage : MonoBehaviour
 
     public void ResetSpeed()
     {
-        agent.speed = 2; // 속도를 2로 설정
+        enemyAi.nav.speed = 2; // 속도를 2로 설정
         iceEffectActive = false;
-        agent.isStopped = false;
+        enemyAi.nav.isStopped = false;
         DamageEffect.Stop();
     }
 
@@ -94,7 +93,7 @@ public class AiDamage : MonoBehaviour
         while (iceEffectActive) // iceEffect가 활성화된 동안 반복
         {
             DamageEffect.Play();
-            aiHp.TakeSkillDamage(2.5f, 0.5f);
+             enemyAi.hp.TakeSkillDamage(2.5f, 0.5f);
             yield return new WaitForSeconds(damageInterval); // 간격 후 반복
         }
     }
