@@ -26,6 +26,7 @@ public class AiMoveattack : MonoBehaviour
         attackbox = transform.GetChild(5).GetComponent<BoxCollider>();
 
         attackbox.enabled = false;
+        
     }
 
     void Update()

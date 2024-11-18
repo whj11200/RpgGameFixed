@@ -11,14 +11,10 @@ public class AiDamage : MonoBehaviour
 
 
 
-
-
     ParticleSystem DamageEffect;
 
     private void Awake()
     {
-        
-
         DamageEffect = transform.GetChild(4).GetComponent<ParticleSystem>();
         DamageEffect.Stop();
     }
@@ -32,37 +28,47 @@ public class AiDamage : MonoBehaviour
     {
         if (!enemyAi.hp.isDie)
         {
-            if (other.TryGetComponent(out SwordBoxCol damage))
+            if(other.TryGetComponent(out Player player))
             {
-                enemyAi.ani.SetTrigger("Damage");
-                Vector3 distance = (transform.position - other.transform.position).normalized;
-                enemyAi.rb.AddForce(distance * backforce, ForceMode.Impulse);
-                enemyAi.nav.isStopped = true;
-                DamageEffect.Play();
-                enemyAi.hp.TakeAttackDamage(15);
+                if (other.TryGetComponent(out SwordBoxCol damage))
+                {
+                    enemyAi.ani.SetTrigger("Damage");
+                    Vector3 distance = (transform.position - other.transform.position).normalized;
+                    enemyAi.rb.AddForce(distance * backforce, ForceMode.Impulse);
+                    enemyAi.nav.isStopped = true;
+                    DamageEffect.Play();
+                    enemyAi.hp.TakeAttackDamage(15);
+                }
+                
             }
-            if (other.transform.parent.TryGetComponent(out IceEffect iceEffect))
+            else
             {
-                iceEffectActive = true;
 
-                StartCoroutine(HitSkill());
-            }
-            if (other.TryGetComponent(out Sleah sleah))
-            {
-                enemyAi.ani.SetTrigger("Damage");
-                enemyAi.nav.isStopped = true;
-                DamageEffect.Play();
-                enemyAi.hp.TakeAttackDamage(30);
-            }
-            if (other.transform.parent.parent.TryGetComponent(out SkAi skAi))
-            {
-                enemyAi.hp.TakeAttackDamage(3);
-                enemyAi.nav.isStopped = true;
-                DamageEffect.Play();
 
+                if (other.transform.parent !=null &&other.transform.parent.TryGetComponent(out IceEffect iceEffect))
+                {
+                    iceEffectActive = true;
+
+                    StartCoroutine(HitSkill());
+                }
+
+                else if (other.transform.parent != null &&other.transform.parent.parent != null && other.transform.parent.parent.TryGetComponent(out SkAi skAi))
+                {
+                    enemyAi.hp.TakeAttackDamage(3);
+                    enemyAi.nav.isStopped = true;
+                    DamageEffect.Play();
+
+                }
+                else if (other.TryGetComponent(out Sleah sleah))
+                {
+                    enemyAi.ani.SetTrigger("Damage");
+                    enemyAi.nav.isStopped = true;
+                    DamageEffect.Play();
+                    enemyAi.hp.TakeAttackDamage(30);
+                }
             }
         }
-       
+
     }
 
     private void OnTriggerExit(Collider other)
