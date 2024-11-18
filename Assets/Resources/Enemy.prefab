@@ -35291,6 +35291,7 @@ GameObject:
   - component: {fileID: 1409519547015183158}
   - component: {fileID: 8316257185343821508}
   - component: {fileID: 3360181801054194658}
+  - component: {fileID: 6684630667794803121}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
@@ -35425,8 +35426,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f69f3b8f4fe3734393e4a7947086f89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyAi: {fileID: 0}
   iceEffectActive: 0
-  agent: {fileID: 0}
 --- !u!114 &8316257185343821508
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35439,6 +35440,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 975335418741821479de406a62f41595, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyAi: {fileID: 0}
   moveInterval: 3
 --- !u!114 &3360181801054194658
 MonoBehaviour:
@@ -35452,8 +35454,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd4f9f82645a0fd4bb44a1772de6af48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyAi: {fileID: 0}
   Hpimage: {fileID: 0}
   isDie: 0
+--- !u!114 &6684630667794803121
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7146544395249958662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ad85be43d51bf64eba1ab1f76833c18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hp: {fileID: 0}
+  moveattack: {fileID: 0}
+  Damage: {fileID: 0}
+  capCol: {fileID: 0}
+  rb: {fileID: 0}
+  ani: {fileID: 0}
+  nav: {fileID: 0}
 --- !u!1 &7249058512370083927
 GameObject:
   m_ObjectHideFlags: 0

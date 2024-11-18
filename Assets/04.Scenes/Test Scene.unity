@@ -927,30 +927,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!1 &837204936 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7146544395249958662, guid: 54df1cbd41a5b4842aac8c97e5cb2e19, type: 3}
-  m_PrefabInstance: {fileID: 1441831534}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &837204945
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 837204936}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ad85be43d51bf64eba1ab1f76833c18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hp: {fileID: 0}
-  moveattack: {fileID: 0}
-  Damage: {fileID: 0}
-  capCol: {fileID: 0}
-  rb: {fileID: 0}
-  ani: {fileID: 0}
-  nav: {fileID: 0}
 --- !u!1 &865326297
 GameObject:
   m_ObjectHideFlags: 0
@@ -2211,10 +2187,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1409519547015183158, guid: 54df1cbd41a5b4842aac8c97e5cb2e19, type: 3}
-      propertyPath: iceEffectActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2861248772924191014, guid: 54df1cbd41a5b4842aac8c97e5cb2e19, type: 3}
       propertyPath: m_LocalPosition.x
       value: 5.57
@@ -2262,10 +2234,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 7146544395249958662, guid: 54df1cbd41a5b4842aac8c97e5cb2e19, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 837204945}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 54df1cbd41a5b4842aac8c97e5cb2e19, type: 3}
 --- !u!1 &1453077690
 GameObject:
